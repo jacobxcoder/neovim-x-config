@@ -47,10 +47,36 @@ return {
   },
   {
     "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
     event = "InsertEnter",
     config = function()
-      require("copilot").setup {}
+      require("copilot").setup {
+        suggestion = {
+          enabled = true,
+          auto_trigger = true,
+          debounce = 50,
+          keymap = {
+            accept = "<C-CR>",
+          },
+        },
+        filetypes = {
+          yaml = true,
+          makrdown = true,
+          help = true,
+          typescript = true,
+          javascript = true,
+          svelte = true,
+          vue = true,
+          react = true,
+          ["."] = true,
+          sh = function()
+            if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), "^%.env.*") then
+              -- disable for .env files
+              return false
+            end
+            return true
+          end,
+        },
+      }
     end,
   },
 }
